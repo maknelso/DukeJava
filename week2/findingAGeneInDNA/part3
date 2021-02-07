@@ -1,0 +1,76 @@
+public class Part3 {
+    public Boolean twoOccurrences(String stringa, String stringb){
+        // returns True if stringa is AT LEAST twice in stringb otherwise returns False
+        // initialize counter
+        int counter = 0;
+        // initialize Boolean
+        Boolean result = false;
+        // e.g. stringa = "by" stringb = "A story by Abby Long"
+        int firstIndex = stringb.indexOf(stringa);
+        if (firstIndex != - 1){
+            counter++;
+        }    
+        int secondIndex = stringb.indexOf(stringa, firstIndex + stringa.length());
+        if (secondIndex != - 1){
+            counter++;
+        }    
+        
+        if (counter >= 2){
+            result = true;
+        }
+        else{
+            result = false;
+        }
+        return result;
+    }
+    
+    public String lastPart(String stringa, String stringb){
+        // find the first occurrence of stringa in stringb and returns the part of stringb that follows stringa
+        String lastString = "";
+        
+        int firstIndex = stringb.indexOf(stringa);
+        if (firstIndex == -1)
+        {
+            lastString = stringb;
+        }
+        else{
+            lastString = stringb.substring(firstIndex + stringa.length(), stringb.length()); 
+        }    
+
+        return lastString;
+    }    
+    
+    public void testTwoOccurrences(){
+        String stringa = "by";
+        String stringb = "A story by Abby Long";
+        Boolean result = twoOccurrences(stringa, stringb);
+        System.out.println("String a is: " + stringa);
+        System.out.println("String b is: " + stringb);
+        System.out.println(result);
+        System.out.println("");
+        
+        stringa = "atg";
+        stringb = "ctgtatgta";
+        result = twoOccurrences(stringa, stringb);
+        System.out.println("String a is: " + stringa);
+        System.out.println("String b is: " + stringb);
+        System.out.println(result);
+        System.out.println("");
+        
+        stringa = "an";
+        stringb = "banana";
+        String lastString = lastPart(stringa, stringb);
+        System.out.println("String a is: " + stringa);
+        System.out.println("String b is: " + stringb);
+        System.out.println(lastString);
+        System.out.println("");
+        
+        stringa = "zoo";
+        stringb = "forest";
+        lastString = lastPart(stringa, stringb);
+        System.out.println("String a is: " + stringa);
+        System.out.println("String b is: " + stringb);
+        System.out.println(lastString);
+        System.out.println("");
+    }
+}
