@@ -1,0 +1,138 @@
+
+/**
+ * Programming Exercise: Parsing Export Data
+ * 
+ * @author (your name) 
+ * @02.07.2021
+ */
+import edu.duke.*;
+import org.apache.commons.csv.*;
+
+public class ProgramExerciseExport {
+    // PART 2
+    // method returns a string of info about the country or returns "NOT FOUND" if there is no info about the country
+    public String countryInfo(CSVParser parser, String countryOfInterest){
+        String countryInformation = "";
+        String countryExport = "";
+        String countryValue = "";
+        String answer = "";
+        // for each row in the CSV file
+        // CSVParser gives you ability to iterate over each line of data within a CSV file
+        for(CSVRecord record : parser){
+            // look at the column "Country"
+            String country = record.get("Country");
+            // check if the column "Country" contains countryOfInterest
+            if(country.contains(countryOfInterest)){
+                // If it contains the "Country" we are looking for, write it down
+                countryInformation = record.get("Country");
+                countryExport = record.get("Exports");
+                countryValue = record.get("Value (dollars)");
+                
+                answer = countryInformation + ": " + countryExport + ": " + countryValue;
+                System.out.println(answer);
+            }
+        }
+        // if there is info about the country, return info about the country
+        if(answer.isEmpty() == false){
+            return answer;
+        }
+        // if there is no info about the country, return NOT FOUND
+        else{
+            answer = "NOT FOUND";
+        }
+        return answer;
+    }
+    // PART 3
+    // method prints the names of all the countries that have BOTH exportItem1 AND exportItem2 as export items
+    public void listExportersTwoProducts(CSVParser parser, String exportItem1, String exportItem2){
+        for(CSVRecord record : parser){
+            // look at the column "Exports"
+            String export = record.get("Exports");
+            // check if the column "Exports" contains exportItem1 && exportItem2
+            if(export.contains(exportItem1) && export.contains(exportItem2)){
+                // write the country down
+                String country = record.get("Country");
+                // print the country out
+                System.out.println(country);
+            }
+        }
+    }
+    // PART 4
+    // method returns the number of countries that export "exportItem"
+    public int numberOfExporters(CSVParser parser, String exportItem){
+        // initialize counter to 0
+        int counter = 0;
+        for(CSVRecord record : parser){
+            // look at the column "Exports"
+            String export = record.get("Exports");
+            // check if the column "Exports" contains exportItem
+            if(export.contains(exportItem)){
+                // increase counter by 1
+                counter ++;
+            }
+        }
+        return counter;
+    }
+    // PART 5
+    // amount is in the format of a dolalr sign - followed by an integer number with a comma separator every 3 digits from the right
+    // e.g. of the string is "$400,000,000"
+    // method prints the names of countries and their Value amount for all countries whose Value string is LONGER than the amount string
+    // we just need to COMPARE the lengths of the strings
+    public void bigExporters(CSVParser parser, String amount){
+        // look at each individual line in the CSV file
+        for(CSVRecord record : parser){
+            // look at the column "Values"
+            String values = record.get("Value (dollars)");
+            if(values.length() > amount.length()){
+                // write the Country down
+                String country = record.get("Country");
+                System.out.print(country + " ");
+                // write the Value down
+                String value = record.get("Value (dollars)");
+                System.out.println(value);
+            }
+        }
+    }
+    
+    // TESTS:
+    // 1) write method tester
+    public void tester(){
+        // create a FileResource - it provides methods for accessing a file
+        FileResource fr = new FileResource();
+        // Once fr CSV file is selected by the user, use .getCSVParser to parse the file so we can iterate over each line of data
+        CSVParser parser = fr.getCSVParser();
+        // each time you want to use parser with a different method - reset the parser by calling
+        // parser = fr.getCSVParser();
+        
+        // 2) call countryInfo method
+        String country = "Germany";
+        System.out.println("Printing the following country's information: " + country);
+        countryInfo(parser, country);
+        System.out.println("");
+        
+        // reset the parser
+        parser = fr.getCSVParser();
+        // 3) call listExportersTwoProducts method
+        String exportItem1 = "gold";
+        String exportItem2 = "diamonds";
+        System.out.println("Printing the following countries that contain the items: " + exportItem1 + " and " + exportItem2);
+        listExportersTwoProducts(parser, exportItem1, exportItem2);
+        System.out.println("");
+        
+        // reset the parser
+        parser = fr.getCSVParser();
+        // 4) call numberOfExporters method
+        String exportItem = "gold";
+        System.out.println("The export item we want to look at is: " + exportItem);
+        int numberOfTimes = numberOfExporters(parser, exportItem);
+        System.out.println("The number of times a country on the list contains " + "exportItem " + "is " + numberOfTimes); 
+        System.out.println("");
+        
+        // reset the parser
+        parser = fr.getCSVParser();
+        // 5) call bigExporters method
+        String value = "$400,000,000";
+        System.out.println("List of countries that have value bigger than " + value + " are: ");
+        bigExporters(parser, value);
+    }
+}
