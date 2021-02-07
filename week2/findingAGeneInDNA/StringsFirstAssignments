@@ -1,0 +1,56 @@
+public class Part1 {
+    public String findSimpleGene(String dna){
+        String result = "";
+        
+        // find index position of start codon "ATG", if there is no "ATG", return empty string
+        int startIndex = dna.indexOf("ATG");
+        if (startIndex == -1){
+            return "";
+        }
+        // find index position of stop codon "TAA", AFTER ATG is found. If there is no "TAA", return empty string
+        int stopIndex = dna.indexOf("ATG", startIndex+3);
+        if (stopIndex == -1){
+            return "";
+        }
+        // if the length of the substring between "ATG" and "TAA" is a multiple of 3, return substring that starts with "ATG" and ends with "TAA"
+        if ((stopIndex - startIndex) % 3 == 0){
+            result = dna.substring(startIndex, stopIndex+3);
+        }
+        
+        return result;
+    }
+    public void testSimpleGene(){
+        // create 5 DNA strings
+        
+        // Substring IS multiple of 3
+        String dna = "AATGCGTAATATGGT";
+        System.out.println("DNA strand is " + dna);
+        String gene = findSimpleGene(dna);
+        System.out.println("Gene is " + gene);
+        
+        // No ATG
+        dna = "ACGTAATGT";
+        System.out.println("DNA strand is " + dna);
+        gene = findSimpleGene(dna);
+        System.out.println("Gene is " + gene);
+        
+        // No TAA
+        dna = "AATGCGTATGGT";
+        System.out.println("DNA strand is " + dna);
+        gene = findSimpleGene(dna);
+        System.out.println("Gene is " + gene);
+        
+        // No ATG and no TAA
+        dna = "ACGTGT";
+        System.out.println("DNA strand is " + dna);
+        gene = findSimpleGene(dna);
+        System.out.println("Gene is " + gene);
+        
+        // Substring is NOT multiple of 3
+        dna = "ATGTTAAACAT";
+        System.out.println("DNA strand is " + dna);
+        gene = findSimpleGene(dna);
+        System.out.println("Gene is " + gene);
+    }
+}
+
