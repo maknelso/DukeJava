@@ -1,0 +1,47 @@
+public class Part2 {
+    public String findGeneSimple(String dna, String startCodon, String stopCodon) {
+        // transform dna to all upper
+        dna = dna.toUpperCase();
+        
+        // get positions of ATG and TAA
+        int startIndex = dna.indexOf(startCodon.toUpperCase());
+        if (startIndex == - 1) // no ATG
+        {
+            return "";
+        }
+        // look for TAA PAST ATG (3 is the length of ATG)
+        int stopIndex = dna.indexOf(stopCodon.toUpperCase(), startIndex+3);
+        String result = dna.substring(startIndex, stopIndex+3);
+        
+        return result;
+    }
+    public void testFindGeneSimple() {
+        String startCodon = "ATG";
+        String stopCodon = "TAA";
+        
+        String dna = "AATGCGTAATATGGT";
+        System.out.println("DNA strand is " + dna);
+        String gene = findGeneSimple(dna, startCodon, stopCodon);
+        System.out.println("Gene is " + gene);
+        
+        dna = "aatgcgtaatatggt";
+        System.out.println("DNA strand is " + dna);
+        gene = findGeneSimple(dna, startCodon, stopCodon);
+        System.out.println("Gene is " + gene);
+        
+        dna = "AATGCTAGGGTAATATGGT";
+        System.out.println("DNA strand is " + dna);
+        gene = findGeneSimple(dna, startCodon, stopCodon);
+        System.out.println("Gene is " + gene);
+        
+        dna = "CGATGGGTTTG";
+        System.out.println("DNA strand is " + dna);
+        gene = findGeneSimple(dna, startCodon, stopCodon);
+        System.out.println("Gene is " + gene);
+        
+        dna = "TTATAA";
+        System.out.println("DNA strand is " + dna);
+        gene = findGeneSimple(dna, startCodon, stopCodon);
+        System.out.println("Gene is " + gene);
+    }
+}
