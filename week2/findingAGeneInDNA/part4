@@ -1,0 +1,21 @@
+import edu.duke.*;
+
+public class Part4 {
+    public void readYoutubeURL(String url){
+        URLResource ur = new URLResource(url);
+        for (String word : ur.words()){
+            // check to see if "youtube.com" is in the word
+            int occurrence = word.toLowerCase().indexOf("youtube.com");
+            if(occurrence != -1){
+                // if youtube.com is in it, find the double quote to the left and right of the occurrence
+                int firstQuote = word.indexOf("\"");
+                int secondQuote = word.indexOf("\"", firstQuote + 1);
+                System.out.println(word.substring(firstQuote +1, secondQuote));
+                System.out.println("");
+            }    
+        }
+    }
+    public void testReadYoutubeURL(){
+        readYoutubeURL("https://www.dukelearntoprogram.com/course2/data/manylinks.html");
+    }
+}
