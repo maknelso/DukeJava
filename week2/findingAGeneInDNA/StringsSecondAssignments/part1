@@ -1,0 +1,176 @@
+
+/**
+ * Wk2: Programming Exercise: Finding Many Genes
+ * 
+ * @Nelson Mak 
+ * @1: 01.30.2021
+ */
+public class Part1 {
+    // returns the index position of the first stopCodon
+    public int findStopCodon(String dna, int startIndex, String stopCodon){        
+        // e.g. startCodon = ATG, stopCodon = TAA
+        int currIndex = dna.indexOf(stopCodon, startIndex + 3);
+        if (currIndex != -1){
+            // a stopCodon was found
+            int diff = currIndex - startIndex;
+            if (diff % 3 == 0){
+                return currIndex;
+            }
+        }
+        else{
+            currIndex = dna.indexOf(stopCodon, currIndex + 1);
+        }
+        return dna.length();
+    }
+    
+    // return gene answer
+    public String findGene(String dna, int where){
+        // find the index of the first occurrence of the start codon "ATG"
+        int startIndex = dna.indexOf("ATG");
+        if (startIndex == -1){
+            return "";
+        }  
+        // find the index of the first occurence of the stop codon "TAA" after the first occurrence of "ATG" that is multiple of 3
+        int taaIndex = findStopCodon(dna, startIndex, "TAA");
+        int tagIndex = findStopCodon(dna, startIndex, "TAG");
+        int tgaIndex = findStopCodon(dna, startIndex, "TGA");
+        
+        // find the minimum of taaIndex, tagIndex, tgaIndex
+        int temp = Math.min(taaIndex, tagIndex);
+        int minIndex = Math.min(temp, tgaIndex);
+        
+        if (minIndex == -1){
+            return "";
+        }
+        else{
+            return dna.substring(startIndex, minIndex + 3);
+        }
+    }
+    
+    public void printAllGenes(String dna) {
+      int startIndex = 0;
+      
+      while (true) {
+          String currentGene = findGene(dna, startIndex);
+          
+          if (currentGene.isEmpty()) {
+              break;
+          }
+          
+          System.out.println(currentGene);
+          startIndex = dna.indexOf(currentGene, startIndex) + currentGene.length();
+      }
+    }
+    
+    // TESTS
+    public void testOn(String dna) {
+        System.out.println("Testing printAllGenes on " + dna);
+        printAllGenes(dna);
+    }
+    public void test() {
+        testOn("ATGATCTAATTTATGCTGCAACGGTGAAGA");
+        testOn("ATG");
+        testOn("ATGATCATAAGAAGATAATAGAGGGCCATGTAA");
+    }
+    
+    public void testFindGene(){
+        // Create 5 dna strings, print the DNA string, print the gene
+        
+        // 1) Proper DNA
+        System.out.println("Test 1");
+        //            v    v
+        String dna = "ATGAAATAA";
+        System.out.println("The DNA string is: " + dna);
+        String gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");
+        
+        // 2) DNA with no "ATG"
+        System.out.println("Test 2");
+        dna = "AAATTGAAATAA";
+        System.out.println("The DNA string is: " + dna);
+        gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");
+        
+        // 3) DNA with "ATG" and one valid stop codone
+        System.out.println("Test 3");
+        //       v        v  
+        dna = "AAATGAAAAAATGATTC";
+        System.out.println("The DNA string is: " + dna);
+        gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");
+        
+        // 4) DNA with "ATG" and multiple valid stop codon
+        System.out.println("Test 4");
+        //        v        v
+        dna = "AAAATGAAAAAATGAAAATAG";
+        System.out.println("The DNA string is: " + dna);
+        gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");
+        
+        // 5) DNA with "ATG" and no valid stop codons
+        System.out.println("Test 5");
+        //     V
+        dna = "ATGAATAA";
+        System.out.println("The DNA string is: " + dna);
+        gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");        
+        
+        // 5) DNA with "ATG" and no valid stop codons
+        System.out.println("Test 6");
+        //     V
+        dna = "ATGTAAGATGCCCTAGT";
+        System.out.println("The DNA string is: " + dna);
+        gene = findGene(dna, 0);
+        System.out.println("The gene in this DNA is: " + gene);
+        System.out.println("");    
+    }
+    
+    public void testFindStopCodon(){
+        System.out.println("Test 1");
+        //            v     v
+        //            012345678      
+        String dna = "ATGAAATAA";
+        String stopCodon = "TAA";
+        int startIndex = dna.indexOf("ATG");
+        int result = findStopCodon(dna, startIndex, stopCodon); 
+        System.out.println(result);
+        System.out.println("");
+        
+        System.out.println("Test 2");
+        //       v     v
+        //     01234567890      
+        dna = "TTATGAAATAA";
+        stopCodon = "TAA";
+        startIndex = dna.indexOf("ATG");
+        result = findStopCodon(dna, startIndex, stopCodon); 
+        System.out.println(result);
+        System.out.println("");
+        
+        // No genes example - expect return length of the codon
+        System.out.println("Test 3");
+        //       
+        //     0123456789      
+        dna = "TTATGAATAA";
+        stopCodon = "TAA";
+        startIndex = dna.indexOf("ATG");
+        result = findStopCodon(dna, startIndex, stopCodon); 
+        System.out.println(result);
+        System.out.println("");
+        
+        // No codon example - expect return length of the codon
+        System.out.println("Test 3");
+        //       
+        //     0123456789      
+        dna = "TTATGAATAT";
+        stopCodon = "TAA";
+        startIndex = dna.indexOf("ATG");
+        result = findStopCodon(dna, startIndex, stopCodon); 
+        System.out.println(result);
+        System.out.println("");
+    }
+}
