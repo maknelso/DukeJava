@@ -1,0 +1,60 @@
+
+/**
+ * Determine how many occurrences of a string appear in another string
+ * 
+ * @Nelson Mak 
+ * @1 - 01.31.2021
+ */
+public class Part2 {
+    // Returns an integer indicating how many times stringa appears in stringb 
+    // where each occurence of stringa must NOT overlap with another occurence of it
+    public int howMany (String stringa, String stringb){
+        // initialize counter
+        int counter = 0;
+        // get the length of stringa and store it in a variable named stringaLength
+        int stringaLength = stringa.length();
+        // return the first index position of stringa
+        int stringaIndex = stringb.indexOf(stringa);
+        // if found:
+        while(stringaIndex != -1){
+            counter++;
+            stringaIndex = stringb.indexOf(stringa, (stringaIndex + stringaLength));
+        }
+        return counter;
+    }
+    
+    // TEST
+    public void testHowMany(){
+        //test 1
+        String stringa = "GAA";
+        String stringb = "ATGAACGAATTGAATC";
+        System.out.println("Test 1");
+        int numberOfTimes = howMany(stringa, stringb);
+        System.out.println("String a: " + stringa);
+        System.out.println("String b: " + stringb);
+        System.out.println("Number of times string a was in string b is: " + numberOfTimes);
+        System.out.println("");
+        
+        //test 2
+        stringa = "AA";
+        stringb = "ATAAAA";
+        System.out.println("Test 2");
+        numberOfTimes = howMany(stringa, stringb);
+        System.out.println("String a: " + stringa);
+        System.out.println("String b: " + stringb);
+        System.out.println("Number of times string a was in string b is: " + numberOfTimes);
+        System.out.println("");
+        
+        // test3 - ans should be 4
+        stringa = "AAAA";
+        //            v   v   v   v 
+        stringb = "AAAAAAAAAAAAAAAAA";
+        System.out.println("Test 2");
+        numberOfTimes = howMany(stringa, stringb);
+        System.out.println("String a: " + stringa);
+        System.out.println("String b: " + stringb);
+        System.out.println("Number of times string a was in string b is: " + numberOfTimes);
+        System.out.println("");
+        
+    }
+}
